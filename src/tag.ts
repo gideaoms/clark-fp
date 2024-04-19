@@ -1,10 +1,15 @@
-function tag<T extends { _tag: string }, R>(
-  input: T,
-  cases: {
-    [K in T as K extends { _tag: infer Y } ? Y & string : never]: (
-      value: K extends { value: infer V } ? V : never
-    ) => R;
-  }
-) {
-  //...
+export function tag<
+  I extends { _tag: keyof C; value?: unknown },
+  C extends {
+    [K in I as K["_tag"]]: K extends { value: unknown }
+      ? (value: K["value"]) => R
+      : () => R;
+  },
+  R
+>(input: I, cases: { [K in keyof C]: C[K] }) {
+  return (cases[input._tag] as Function)(input.value) as C[I["_tag"]] extends (
+    value: any
+  ) => infer Y
+    ? Y
+    : never;
 }

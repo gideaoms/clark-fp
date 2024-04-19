@@ -10,7 +10,7 @@ npm install clark-fp
 
 ### Either
 ```ts
-import { either } from "./main.ts";
+import { either } from "clark-fp";
 
 type User = {
   id: string;
@@ -38,7 +38,7 @@ if (either.isLeft(user)) {
 
 ### Maybe
 ```ts
-import { maybe } from "./main.ts";
+import { maybe } from "clark-fp";
 
 type User = {
   id: string;
@@ -66,7 +66,7 @@ if (maybe.isNone(user)) {
 
 ### Match
 ```ts
-import { match } from "./main.ts";
+import { match } from "clark-fp";
 
 const status = "active" as "active" | "inactive";
 
@@ -74,5 +74,28 @@ const result = match(status)
   .when("active", "You are active")
   .when("inactive", "You are not active")
   .exhaustive();
+console.log({ result });
+```
+
+### Tag
+```ts
+import { tag } from "clark-fp";
+
+type Banana = {
+  _tag: "Banana";
+};
+
+type Orange<T> = {
+  _tag: "Orange";
+  value: T;
+};
+
+type Fruit<T> = Banana | Orange<T>;
+
+const input = { _tag: "Orange", value: "It is a orange" } as Fruit<string>;
+const result = tag(input, {
+  Banana: () => "This is a banana",
+  Orange: (v) => v,
+});
 console.log({ result });
 ```

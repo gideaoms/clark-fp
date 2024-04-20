@@ -72,7 +72,7 @@ const status = "active" as "active" | "inactive";
 
 const result = match(status)
   .when("active", "You are active")
-  .when("inactive", "You are not active")
+  .when("inactive", (status) => `You are not ${status}`)
   .exhaustive();
 console.log({ result });
 ```

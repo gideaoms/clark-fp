@@ -1,5 +1,5 @@
 export function match<const T>(input: T) {
-  return new Match(input, unmatched);
+  return new Ex(input, unmatched);
 }
 
 type State<T> =
@@ -16,15 +16,15 @@ function matched<const T>(value: T): State<T> {
   return { matched: true, value };
 }
 
-class Match<const T, const U> {
+class Ex<const T, const U> {
   constructor(private input: T, private state: State<U>) {}
 
   when<const P extends T, R>(of: P, returns: R) {
     if (this.state.matched) {
-      return this as Match<Exclude<T, P>, R | U>;
+      return this as Ex<Exclude<T, P>, R | U>;
     }
     const state = of === this.input ? matched(returns) : unmatched;
-    return new Match(this.input, state) as Match<Exclude<T, P>, R | U>;
+    return new Ex(this.input, state) as Ex<Exclude<T, P>, R | U>;
   }
 
   otherwise<R>(of: R) {
@@ -35,13 +35,10 @@ class Match<const T, const U> {
   }
 
   // @ts-ignore
-  exhaustive: [T] extends [never] ? () => U : ExhaustiveError<T> =
-    this._exhaustive;
-
-  _exhaustive() {
+  exhaustive: [T] extends [never] ? () => U : ExhaustiveError<T> = () => {
     if (this.state.matched) {
       return this.state.value;
     }
     throw new Error("Unhandled pattern matching");
-  }
+  };
 }

@@ -6,7 +6,7 @@ export function tag<
       : () => R;
   },
   R
->(input: I, cases: { [K in keyof C]: C[K] }) {
+>(input: I, cases: C) {
   return (cases[input._tag] as Function)(input.value) as C[I["_tag"]] extends (
     value: any
   ) => infer Y

@@ -9,7 +9,6 @@ export function tag<
   input: T,
   cases: U,
 ): Result<U[T["_tag"]]> {
-  console.log({ input, cases });
   const match = cases[input._tag as keyof U] as any;
   if (typeof match === "function") {
     return match(input.value);

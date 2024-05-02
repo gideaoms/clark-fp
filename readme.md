@@ -36,31 +36,24 @@ if (either.isLeft(user)) {
 }
 ```
 
-### Maybe
+### Option
 ```ts
-import { maybe } from "clark-fp";
+import { option } from "clark-fp";
 
-type User = {
-  id: string;
-  name: string;
-};
-
-function findUserById(userId: string) {
-  if (!userId) {
-    return maybe.none;
+function readFile(path: string) {
+  try {
+    const result = // ...read file here
+    return option.some(result)
+  } catch (err) {
+    return option.none
   }
-  const user: User = {
-    id: "123",
-    name: "John",
-  };
-  return maybe.some(user);
 }
 
-const user = findUserById("123");
-if (maybe.isNone(user)) {
-  console.log(`Error: user is null`);
+const result = readFile("./file.txt");
+if (option.isNone(result)) {
+  console.log(`Error: file not found`);
 } else {
-  console.log(`Success: ${user.value.name}`);
+  console.log(result);
 }
 ```
 

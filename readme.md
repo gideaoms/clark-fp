@@ -68,21 +68,39 @@ console.log({ result });
 ```ts
 import { tag } from "clark-fp";
 
-type Banana = {
-  _tag: "Banana";
-};
-
-type Orange<T> = {
-  _tag: "Orange";
+type Ok<T> = {
+  _tag: "Ok";
   value: T;
 };
 
-type Fruit<T> = Banana | Orange<T>;
+type Err<T> = {
+  _tag: "Err";
+  value: T;
+};
 
-const input = { _tag: "Orange", value: "It is a orange" } as Fruit<string>;
-const result = tag(input, {
-  Banana: "This is a banana",
-  Orange: (v) => v,
+function Ok<T>(value: T): Ok<T> {
+  return { _tag: "Ok", value };
+}
+
+function Err<T>(value: T): Err<T> {
+  return { _tag: "Err", value };
+}
+
+function readFile(path: string) {
+  try {
+    const result = // ...read file here
+    return Ok(result);
+  } catch (err) {
+    return Err(err);
+  }
+}
+
+const path = "file.txt";
+const result = await readFile(path);
+const msg = tag(result, {
+  Ok: "The file was read successfully",
+  Err: (err) => err.message,
 });
-console.log({ result });
+
+console.log({ msg });
 ```

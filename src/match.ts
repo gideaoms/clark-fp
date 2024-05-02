@@ -12,7 +12,7 @@ type ExhaustiveError<_T> = {
 
 const unmatched: State<never> = { matched: false, value: undefined };
 
-function isFn(value: unknown): value is Function {
+function isFn(value: unknown): value is (input: any) => any {
   return typeof value === "function";
 }
 
@@ -35,15 +35,18 @@ class Ex<const T, const U> {
     return new Ex(this.input, state) as Ex<Exclude<T, P>, R | U>;
   }
 
-  otherwise<R>(of: R) {
+  otherwise<R>(of: ((input: T) => R) | R) {
     if (this.state.matched) {
       return this.state.value;
     }
-    return of;
+    if (isFn(of)) {
+      return of(this.input) as R;
+    }
+    return of as R;
   }
 
   // @ts-ignore
-  exhaustive: [T] extends [never] ? () => U : ExhaustiveError<T> = () => {
+  exhaustive: T extends never ? () => U : ExhaustiveError<T> = () => {
     if (this.state.matched) {
       return this.state.value;
     }

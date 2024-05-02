@@ -1,31 +1,31 @@
 export namespace either {
-  export type Left<L> = {
-    _tag: "Left";
+  export type Ok<L> = {
+    _tag: "Ok";
     value: L;
   };
 
-  export type Right<R> = {
-    _tag: "Right";
+  export type Err<R> = {
+    _tag: "Err";
     value: R;
   };
 
-  export type Result<L, R> = Left<L> | Right<R>;
+  export type Result<L, R> = Err<L> | Ok<R>;
 
-  export function left<L>(value: L): Left<L> {
-    return { _tag: "Left", value };
+  export function err<L>(value: L): Err<L> {
+    return { _tag: "Err", value };
   }
 
-  export function right<R>(value: R): Right<R> {
-    return { _tag: "Right", value };
+  export function ok<R>(value: R): Ok<R> {
+    return { _tag: "Ok", value };
   }
 
-  export function isLeft<L, R = never>(value: Result<L, R>): value is Left<L> {
-    return value._tag === "Left";
+  export function isErr<L, R = never>(value: Result<L, R>): value is Err<L> {
+    return value._tag === "Err";
   }
 
-  export function isRight<R, L = never>(
+  export function isOk<R, L = never>(
     value: Result<L, R>,
-  ): value is Right<R> {
-    return value._tag === "Right";
+  ): value is Ok<R> {
+    return value._tag === "Ok";
   }
 }

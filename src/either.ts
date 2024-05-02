@@ -15,7 +15,7 @@ export namespace either {
     return { _tag: "Left", value };
   }
 
-  export function right<A>(value: A): Right<A> {
+  export function right<R>(value: R): Right<R> {
     return { _tag: "Right", value };
   }
 

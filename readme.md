@@ -12,27 +12,20 @@ npm install clark-fp
 ```ts
 import { either } from "clark-fp";
 
-type User = {
-  id: string;
-  name: string;
-};
-
-function findUserById(userId: string) {
-  if (!userId) {
-    return either.left(new Error("User not found"));
+function readFile(userId: string) {
+  try {
+    const result = // ...read file here
+    return either.right(result);
+  } catch (err) {
+    return either.left(err);
   }
-  const user: User = {
-    id: "123",
-    name: "John",
-  };
-  return either.right(user);
 }
 
-const user = findUserById("123");
-if (either.isLeft(user)) {
-  console.log(`Error: ${user.value.message}`);
+const result = readFile("file.txt");
+if (either.isLeft(result)) {
+  console.log(`Error: ${result.value.message}`);
 } else {
-  console.log(`Success: ${user.value.name}`);
+  console.log(result);
 }
 ```
 
@@ -58,6 +51,7 @@ if (option.isNone(result)) {
 ```
 
 ### Match
+This function was inspired by [ts-pattern](https://github.com/gvergnaud/ts-pattern), the difference is that you can return a value directly instead of having to create a arrow function
 ```ts
 import { match } from "clark-fp";
 

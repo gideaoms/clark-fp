@@ -94,7 +94,7 @@ type Fruit<T> = Banana | Orange<T>;
 
 const input = { _tag: "Orange", value: "It is a orange" } as Fruit<string>;
 const result = tag(input, {
-  Banana: () => "This is a banana",
+  Banana: "This is a banana",
   Orange: (v) => v,
 });
 console.log({ result });

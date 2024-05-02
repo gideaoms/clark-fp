@@ -51,7 +51,7 @@ if (option.isNone(result)) {
 ```
 
 ### Match
-This function was inspired by [ts-pattern](https://github.com/gvergnaud/ts-pattern), the difference is that you can return a value directly instead of having to create a arrow function
+This function was inspired by [ts-pattern](https://github.com/gvergnaud/ts-pattern), the difference is that this library is simpler in terms of pattern matching and you can return a value directly instead of having to create a arrow function
 ```ts
 import { match } from "clark-fp";
 

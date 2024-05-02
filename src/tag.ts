@@ -1,9 +1,12 @@
 type Result<T> = T extends (input: any) => infer R ? R : T;
 
 export function tag<
-  const T extends { _tag: string; value: unknown },
+  const T extends { _tag: string; value?: unknown },
   const U extends
-    | { [K in T as K["_tag"]]: (input: K["value"]) => unknown }
+    | {
+      [K in T as K["_tag"]]: K["value"] extends undefined ? () => unknown
+        : (input: K["value"]) => unknown;
+    }
     | { [K in T as K["_tag"]]: unknown },
 >(
   input: T,

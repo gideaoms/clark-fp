@@ -1,6 +1,7 @@
 export namespace option {
   export type None = {
     _tag: "None";
+    value?: never;
   };
 
   export type Some<T> = {

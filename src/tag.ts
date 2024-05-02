@@ -1,15 +1,18 @@
+type Result<T> = T extends (input: any) => infer R ? R : T;
+
 export function tag<
-  I extends { _tag: keyof C; value?: unknown },
-  C extends {
-    [K in I as K["_tag"]]: K extends { value: unknown }
-      ? (value: K["value"]) => R
-      : () => R;
-  },
-  R
->(input: I, cases: C) {
-  return (cases[input._tag] as Function)(input.value) as C[I["_tag"]] extends (
-    value: any
-  ) => infer Y
-    ? Y
-    : never;
+  const T extends { _tag: string; value: unknown },
+  const U extends
+    | { [K in T as K["_tag"]]: (input: K["value"]) => unknown }
+    | { [K in T as K["_tag"]]: unknown },
+>(
+  input: T,
+  cases: U,
+): Result<U[T["_tag"]]> {
+  console.log({ input, cases });
+  const match = cases[input._tag as keyof U] as any;
+  if (typeof match === "function") {
+    return match(input.value);
+  }
+  return match;
 }

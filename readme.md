@@ -1,5 +1,5 @@
 # clark-fp
-Introducing our lightweight library designed to enhance code reliability using functional programming techniques. Built to empower developers, it introduces features like either, maybe, and match. Simplify error handling and promote predictability in your code with ease.
+Introducing our lightweight library designed to enhance code reliability using functional programming techniques. Built to empower developers, it introduces features like either, option, tag, and match. Simplify error handling and promote predictability in your code with ease.
 
 ## Install
 ```cmd

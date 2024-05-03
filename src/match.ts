@@ -35,14 +35,14 @@ class Ex<const T, const U> {
     return new Ex(this.input, state) as Ex<Exclude<T, P>, R | U>;
   }
 
-  otherwise<R>(of: ((input: T) => R) | R) {
+  otherwise<R>(returns: ((input: T) => R) | R) {
     if (this.state.matched) {
       return this.state.value;
     }
-    if (isFn(of)) {
-      return of(this.input) as R;
+    if (isFn(returns)) {
+      return returns(this.input) as R;
     }
-    return of as R;
+    return returns as R;
   }
 
   // @ts-ignore

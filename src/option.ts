@@ -11,9 +11,9 @@ export namespace option {
 
   export type Option<T> = None | Some<T>;
 
-  export const none: None = { _tag: "None" };
+  export const None: None = { _tag: "None" };
 
-  export function some<T>(value: T): Some<T> {
+  export function Some<T>(value: T): Some<T> {
     return { _tag: "Some", value };
   }
 

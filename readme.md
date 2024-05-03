@@ -38,9 +38,9 @@ import { option } from "clark-fp";
 function readFile(path: string) {
   try {
     const result = // ...read file here
-    return option.some(result)
+    return option.Some(result)
   } catch (err) {
-    return option.none
+    return option.None
   }
 }
 
@@ -64,7 +64,7 @@ const result = match(status)
   .when("inactive", (status) => `You are not ${status}`)
   .exhaustive();
 
-console.log({ result });
+console.log(result);
 ```
 
 ### Tag
@@ -87,5 +87,5 @@ const msg = tag(result, {
   Err: (err) => err.message,
 });
 
-console.log({ msg });
+console.log(msg);
 ```

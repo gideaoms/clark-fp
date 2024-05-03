@@ -24,7 +24,7 @@ function readFile(path: string) {
 }
 
 const result = readFile("file.txt");
-if (either.isLeft(result)) {
+if (either.isOk(result)) {
   console.log(`Error: ${result.value.message}`);
 } else {
   console.log(result);

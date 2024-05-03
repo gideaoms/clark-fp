@@ -12,12 +12,12 @@ npm install clark-fp
 ```ts
 import { either } from "clark-fp";
 
-function readFile(userId: string) {
+function readFile(path: string) {
   try {
     const result = // ...read file here
-    return either.right(result);
+    return either.Ok(result);
   } catch (err) {
-    return either.left(err);
+    return either.Err(err);
   }
 }
 
@@ -61,37 +61,20 @@ const result = match(status)
   .when("active", "You are active")
   .when("inactive", (status) => `You are not ${status}`)
   .exhaustive();
+
 console.log({ result });
 ```
 
 ### Tag
 ```ts
-import { tag } from "clark-fp";
-
-type Ok<T> = {
-  _tag: "Ok";
-  value: T;
-};
-
-type Err<T> = {
-  _tag: "Err";
-  value: T;
-};
-
-function Ok<T>(value: T): Ok<T> {
-  return { _tag: "Ok", value };
-}
-
-function Err<T>(value: T): Err<T> {
-  return { _tag: "Err", value };
-}
+import { tag, either } from "clark-fp";
 
 function readFile(path: string) {
   try {
     const result = // ...read file here
-    return Ok(result);
+    return either.Ok(result);
   } catch (err) {
-    return Err(err);
+    return either.Err(err);
   }
 }
 

@@ -1,6 +1,8 @@
 # clark-fp
 Introducing our lightweight library designed to enhance code reliability using functional programming techniques. Built to empower developers, it introduces features like either, option, tag, and match. Simplify error handling and promote predictability in your code with ease.
 
+![clark-fp](https://github.com/gideaoms/clark-fp/assets/6031121/9329a915-7d8e-4595-9df8-b94aa0578daf)
+
 ## Install
 ```cmd
 npm install clark-fp

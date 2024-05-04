@@ -46,7 +46,7 @@ class Ex<const T, const U> {
   }
 
   // @ts-ignore
-  exhaustive: T extends never ? () => U : ExhaustiveError<T> = () => {
+  exhaustive: [T] extends [never] ? () => U : ExhaustiveError<T> = () => {
     if (this.state.matched) {
       return this.state.value;
     }

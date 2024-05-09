@@ -7,7 +7,7 @@ export function tag<
 >(
   input: T,
   cases: U,
-): R extends (input: any) => infer R ? R : R {
+): R extends (input: any) => infer Y ? Y : R {
   const match = cases[input._tag as keyof U] as any;
   if (typeof match === "function") {
     return match(input.value);

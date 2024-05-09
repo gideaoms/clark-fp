@@ -1,6 +1,6 @@
 {
   "name": "clark-fp",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "description": "Functional programming utilities",
   "main": "dist/main.js",
   "module": "dist/main.js",

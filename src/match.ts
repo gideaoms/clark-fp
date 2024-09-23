@@ -1,55 +1,59 @@
-export function match<const T>(input: T) {
-  return new Ex(input, unmatched);
+export function match<T>(input: T) {
+  return new Matcher(input, unmatched)
 }
 
-type State<T> =
-  | { matched: true; value: T }
+type State<Value> =
+  | { matched: true; value: Value }
   | { matched: false; value: undefined };
 
-type ExhaustiveError<_T> = {
-  _tag: "ExhaustiveError";
+type ExhaustiveError<Value> = {
+  tag: "ExhaustiveError";
 };
 
 const unmatched: State<never> = { matched: false, value: undefined };
 
-function isFn(value: unknown): value is (input: any) => any {
-  return typeof value === "function";
+function matched<Value>(value: Value) {
+  return { matched: true, value } satisfies State<Value>;
 }
 
-function matched<const T>(value: T): State<T> {
-  return { matched: true, value };
-}
+class Matcher<Input, Value> {
+  constructor(private input: Input, private state: State<Value>) { }
 
-class Ex<const T, const U> {
-  constructor(private input: T, private state: State<U>) {}
-
-  when<const P extends T, R>(of: P, returns: ((value: P) => R) | R) {
+  when<Alternative extends Input, const Result>(
+    alternative: Alternative,
+    returning: ((value: Alternative) => Result) | Result
+  ) {
     if (this.state.matched) {
-      return this as Ex<Exclude<T, P>, R | U>;
+      return this as Matcher<Exclude<Input, Alternative>, Result | Value>
     }
-    if (isFn(returns)) {
-      const state = of === this.input ? matched(returns(of)) : unmatched;
-      return new Ex(this.input, state) as Ex<Exclude<T, P>, R | U>;
+    if (typeof returning === 'function') {
+      const state = alternative === this.input
+        ? matched((returning as (value: Alternative) => Result)(alternative))
+        : unmatched;
+      return new Matcher(this.input, state) as
+        Matcher<Exclude<Input, Alternative>, Result | Value>;
     }
-    const state = of === this.input ? matched(returns) : unmatched;
-    return new Ex(this.input, state) as Ex<Exclude<T, P>, R | U>;
+    const state = alternative === this.input ? matched(returning) : unmatched
+    return new Matcher(this.input, state) as
+      Matcher<Exclude<Input, Alternative>, Result>
   }
 
-  otherwise<R>(returns: ((input: T) => R) | R) {
+  otherwise<const Result>(returning: ((input: Input) => Result) | Result) {
     if (this.state.matched) {
       return this.state.value;
     }
-    if (isFn(returns)) {
-      return returns(this.input) as R;
+    if (typeof returning === 'function') {
+      return (returning as (input: Input) => Result)(this.input) as Result;
     }
-    return returns as R;
+    return returning as Result;
   }
 
   // @ts-ignore
-  exhaustive: [T] extends [never] ? () => U : ExhaustiveError<T> = () => {
-    if (this.state.matched) {
-      return this.state.value;
-    }
-    throw new Error("Unhandled pattern matching");
-  };
+  exhaustive: [Input] extends [never] ? () => Value : ExhaustiveError<Input> =
+    () => {
+      if (this.state.matched) {
+        return this.state.value;
+      }
+      throw new Error("Unhandled pattern matching");
+    };
 }
